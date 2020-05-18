@@ -10,7 +10,8 @@ module.exports.getAccessToken = async (event) => {
   + '&client_secret=mtab8mkumljmh3ggmvnom1q9n'
   + '&grant_type=authorization_code'
   + '&redirect_uri=https://maxzakh.github.io/meet-up/'
-  + '&code=https://secure.meetup.com/oauth2/authorize?client_id=3eb98ifv4i1k0873gckn7i8j6g&response_type=code&redirect_uri=https://maxzakh.github.io/meet-up/'
+  + '&code=95db82673cbe960b2072765c728d4e15'
+  // + '&code=https://secure.meetup.com/oauth2/authorize?client_id=3eb98ifv4i1k0873gckn7i8j6g&response_type=code&redirect_uri=https://maxzakh.github.io/meet-up/'
   // + '&code=https://secure.meetup.com/oauth2/authorize?client_id=3eb98ifv4i1k0873gckn7i8j6g&response_type=code&redirect_uri=https://maxzakh.github.io/meet-up/'
   // + '&code=' + ((event.pathParameters && event.pathParameters.code) || "ah");
   
