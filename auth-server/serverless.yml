@@ -70,7 +70,7 @@ functions:
     handler: handler.refreshAccessToken
     events:
       - http:
-          path: api/token/{refresh_token}
+          path: api/refreshtoken/{refresh_token}
           method: get
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events

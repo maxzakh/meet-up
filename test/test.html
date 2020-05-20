@@ -47,7 +47,7 @@
             const refreshValue = refreshCodeElement.value;
 
             // Replace this by your function endpoint
-            const lambdaRefreshURL = 'https://2u37kmztke.execute-api.eu-central-1.amazonaws.com/dev/api/refresh/' + refreshValue;
+            const lambdaRefreshURL = 'https://2u37kmztke.execute-api.eu-central-1.amazonaws.com/dev/api/refreshtoken/' + refreshValue;
 
             fetch(lambdaRefreshURL)
                 .then(function (response) {
