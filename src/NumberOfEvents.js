@@ -7,7 +7,7 @@ class NumberOfEvents extends Component {
 
     render() {
         return (
-            <div>{this.state.query}</div>
+            <div className='numberOfEvents'>{this.state.query}</div>
         )
     }
 }

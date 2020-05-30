@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import NumberOfEvents from '../components/NumberOfEvents';
+import NumberOfEvents from '../NumberOfEvents';
 
 describe('<NumberOfEvents /> Component', () => {
     let NumberOfEventsWrapper;
@@ -9,6 +9,6 @@ describe('<NumberOfEvents /> Component', () => {
     });
 
     test('events component is generated', () => {
-        expect(NumberOfEventsWrapper.find('.events')).toHaveLength(1);
+        expect(NumberOfEventsWrapper.find('.numberOfEvents')).toHaveLength(1);
     });
 });
