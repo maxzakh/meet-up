@@ -1,21 +1,33 @@
 import React, { Component } from 'react';
 
 class Event extends Component {
-    // state = {
-    //     events: [],
-    // }
+    state = {
+        showDetails: false,
+    }
 
-    // render() {
-    //     return (
-    //         <ul className="EventList">
-    //             {this.state.events.map(event =>
-    //                 <li>
-    //                     <Event event={event} />
-    //                 </li>
-    //             )}
-    //         </ul>
-    //     );
-    // }
+    handleShowDetails = () => {
+        if (this.state.showDetails === false) {
+            this.setState({ showDetails: true });
+        }
+        else {
+            this.setState({ showDetails: false });
+        }
+    }
+
+    render() {
+        const { event } = this.props;
+        
+        return (
+            <div className='event'>
+                <div className='eventName'>{event.name}</div>
+                    <div className='eventDate'>{event.local_date}</div>
+                    <div className='eventTime'>{event.local_time}</div>
+                    <div className='eventLocationAddress'>{event.venue.address_1}</div>
+                    <div className='eventLocationCity'>{event.venue.city}</div>
+                    <button onClick={this.handleShowDetails}>Show Details</button>
+            </div>
+        );
+    }
 }
 
 export default Event;
