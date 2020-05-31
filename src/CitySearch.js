@@ -24,10 +24,9 @@ class CitySearch extends Component {
                     value={this.state.query}
                     onChange={this.handleInputChanged}
                 />
-                <ul className="suggestions" onClick={() => this.handleItemClicked(item.name_string)}
-                >
+                <ul className="suggestions">
                     {this.state.suggestions.map(item =>
-                        <li key={item.name_string}>{item.name_string}</li>
+                        <li key={item.name_string} onClick={() => this.handleItemClicked(item.name_string)}>{item.name_string}</li>
                     )}
                 </ul>
             </div>
