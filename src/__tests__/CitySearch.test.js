@@ -4,7 +4,7 @@ import CitySearch from '../CitySearch';
 
 describe('<CitySearch /> component', () => {
     let CitySearchWrapper;
-    beforeAll(() => {
+    beforeEach(() => {
         CitySearchWrapper = shallow(<CitySearch />);
     });
 
