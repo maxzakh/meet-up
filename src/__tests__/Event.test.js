@@ -1,12 +1,12 @@
 import React from 'react'
 import { shallow } from 'enzyme';
 import Event from '../Event';
-import mockData from './Event.test.MockData';
+import mockData from './Event.test.MockData.json';
 
 describe('<App /> component', () => {
     let EventWrapper;
     beforeEach(() => {
-        EventWrapper = shallow(<Event />);
+        EventWrapper = shallow(<Event event={mockData[0]} />);
     });
 
     test('Event has rendered', () => {
@@ -21,7 +21,7 @@ describe('<App /> component', () => {
         expect(EventWrapper.find('.eventDetailsButton')).toHaveLength(1);
     })
 
-    test('1234 click on event should change state', () => {
+    test('click on event should change state', () => {
         EventWrapper.find('.eventDetailsButton').simulate('click');
         expect(EventWrapper.state('showDetails')).toBe(true);
     });
