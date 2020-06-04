@@ -10,7 +10,11 @@ class CitySearch extends Component {
     handleInputChanged = (event) => {
         const value = event.target.value;
         this.setState({ query: value });
-        getSuggestions(value).then(suggestions => this.setState({ suggestions }));
+        let that = this;
+        function askServer(suggestions) {
+            return that.setState({ suggestions });
+        }
+        getSuggestions(value).then(askServer);
     }
 
     handleItemClicked = (value, lat, lon) => {

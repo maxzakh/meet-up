@@ -1,27 +1,25 @@
 import mockData from './__tests__/Event.test.MockData.json';
 import axios from 'axios';
 
-async function getOrRenewAccessToken(type, key) {
-    let url;
-    if (type === 'get') {
-        // Lambda endpoint to get token by code
-        url = 'https://2u37kmztke.execute-api.eu-central-1.amazonaws.com/dev/api/token/'
-            + key;
-    } else if (type === 'renew') {
-        // Lambda endpoint to get token by refresh_token
-        url = 'https://2u37kmztke.execute-api.eu-central-1.amazonaws.com/dev/api/refresh/'
-            + key;
-    }
+const AWS_AUTH_URL = 'https://2u37kmztke.execute-api.eu-central-1.amazonaws.com/dev/api/';
+const MEETUP_AUTH_URL = 'https://secure.meetup.com/oauth2/authorize?client_id=3eb98ifv4i1k0873gckn7i8j6g&response_type=code&redirect_uri=https://maxzakh.github.io/meet-up/';
+const MEETUP_QUERY_URL = 'https://api.meetup.com/find/locations?&sign=true&photo-host=public&query=';
+const MEETUP_UPCOMING_EVENTS_URL = 'https://api.meetup.com/find/upcoming_events?&sign=true&photo-host=public';
 
-    // Use Axios to make a GET request to the endpoint
+async function getOrRenewAccessToken(type, key) {
+    const urlPart = type === 'get' ? 'token' : type === 'renew' ? 'refresh' : '?';
+    let url = `${AWS_AUTH_URL}${urlPart}/${key}`;
+
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('last_saved_time');
+
     const tokenInfo = await axios.get(url);
 
-    // Save tokens to localStorage together with a timestamp
     localStorage.setItem('access_token', tokenInfo.data.access_token);
     localStorage.setItem('refresh_token', tokenInfo.data.refresh_token);
     localStorage.setItem('last_saved_time', Date.now());
 
-    // Return the access_token
     return tokenInfo.data.access_token;
 }
 
@@ -50,15 +48,19 @@ async function getSuggestions(query) {
         ];
     }
 
-    const token = await getAccessToken();
-    if (token) {
-        const url = 'https://api.meetup.com/find/locations?&sign=true&photo-host=public&query='
-            + query
-            + '&access_token=' + token;
+    let resultData = [];
+    try {
+        const token = await getAccessToken();
+        console.log('resultData token', token);
+        const url = `${MEETUP_QUERY_URL}${query}&access_token=${token}`;
         const result = await axios.get(url);
-        return result.data;
+        resultData = result.data;
+    } catch (error) {
+        console.log('resultData', error);
+        window.location.href = MEETUP_AUTH_URL;
+        // console.log('redirecting to auth server');
     }
-    return [];
+    return resultData;
 }
 
 async function getEvents(lat, lon) {
@@ -66,17 +68,19 @@ async function getEvents(lat, lon) {
         return mockData;
     }
 
-    const token = await getAccessToken();
-    if (token) {
-        let url = 'https://api.meetup.com/find/upcoming_events?&sign=true&photo-host=public'
-            + '&access_token=' + token;
-        // lat, lon is optional; if you have a lat and lon, you can add them
-        if (lat && lon) {
-            url += '&lat=' + lat + '&lon=' + lon;
-        }
+    let resultEvents = [];
+    try {
+        const token = await getAccessToken();
+
+        let suffix = (lat && lon) ? `&lat=${lat}&lon=${lon}` : '';
+        let url = `${MEETUP_UPCOMING_EVENTS_URL}&access_token=${token}${suffix}`;
+        
         const result = await axios.get(url);
-        return result.data.events;
+        resultEvents = result.data.events;
+    } catch (error) {
+        console.log('cannot get events', error);
     }
+    return resultEvents;
 }
 
 async function getAccessToken() {
@@ -85,12 +89,20 @@ async function getAccessToken() {
     if (!accessToken) {
         const searchParams = new URLSearchParams(window.location.search);
         const code = searchParams.get('code');
+        // console.log(`url code '${code}'`);
 
         if (!code) {
-            window.location.href = 'https://secure.meetup.com/oauth2/authorize?client_id=3eb98ifv4i1k0873gckn7i8j6g&response_type=code&redirect_uri=https://maxzakh.github.io/meet-up/';
+            window.location.href = MEETUP_AUTH_URL;
             return null;
         }
-        return getOrRenewAccessToken('get', code);
+
+        try {
+            var rv = getOrRenewAccessToken('get', code);
+        } catch (error) {
+            // window.location.href = MEETUP_AUTH_URL;
+            throw error;
+        }
+        return rv;
     }
 
     const lastSavedTime = localStorage.getItem('last_saved_time');
