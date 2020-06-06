@@ -11,6 +11,10 @@ class App extends Component {
     page: null
   }
 
+  componentDidMount() {
+    this.updateEvents();
+  }
+
   updateEvents = (lat, lon, page) => {
     if (lat && lon) {
       getEvents(lat, lon, this.state.page).then(events => 
