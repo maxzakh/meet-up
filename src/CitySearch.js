@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getSuggestions } from './api';
+import { InfoAlert } from './Alert';
 
 class CitySearch extends Component {
     state = {
@@ -10,11 +11,19 @@ class CitySearch extends Component {
     handleInputChanged = (event) => {
         const value = event.target.value;
         this.setState({ query: value });
-        let that = this;
-        function askServer(suggestions) {
-            return that.setState({ suggestions });
-        }
-        getSuggestions(value).then(askServer);
+        getSuggestions(value).then(suggestions => {
+            this.setState({ suggestions });
+
+            if (value && suggestions.length === 0) {
+                this.setState({
+                    infoText: 'City not found'
+                });
+            } else {
+                this.setState({
+                    infoText: '',
+                });
+            }
+        });
     }
 
     handleItemClicked = (value, lat, lon) => {
@@ -36,6 +45,7 @@ class CitySearch extends Component {
                         <li key={item.name_string} onClick={() => this.handleItemClicked(item.name_string, item.lat, item.lon)}>{item.name_string}</li>
                     )}
                 </ul>
+                <InfoAlert text={this.state.infoText} />
             </div>
         );
     }
