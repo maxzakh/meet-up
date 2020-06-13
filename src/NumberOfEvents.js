@@ -2,15 +2,22 @@ import React, { Component } from 'react';
 
 class NumberOfEvents extends Component {
     state = {
-        query: 11
+        query: 32
     };
 
     handleInputChanged = (event) => {
         const value = event.target.value;
         this.setState({ query: value });
-        if (value) {
-            this.props.updateEvents(null, null, value);
+        if (value <= 0) {
+            this.setState({
+                infoText: 'Cannot be less than 1'
+            });
+        } else {
+            this.setState({
+                infoText: ''
+            });
         }
+        this.props.updateEvents(null, null, value);
     };
 
     render() {
