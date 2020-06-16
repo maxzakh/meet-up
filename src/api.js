@@ -69,14 +69,22 @@ async function getEvents(lat, lon) {
     }
 
     let resultEvents = [];
+
+    if (!navigator.onLine) {
+        resultEvents = localStorage.getItem('lastEvents');
+        return JSON.parse(resultEvents);
+    }
+
     try {
         const token = await getAccessToken();
 
         let suffix = (lat && lon) ? `&lat=${lat}&lon=${lon}` : '';
         let url = `${MEETUP_UPCOMING_EVENTS_URL}&access_token=${token}${suffix}`;
-        
+
         const result = await axios.get(url);
         resultEvents = result.data.events;
+
+        localStorage.setItem('lastEvents', JSON.stringify(resultEvents));
     } catch (error) {
         console.log('cannot get events', error);
     }
