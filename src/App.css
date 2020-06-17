@@ -97,6 +97,10 @@ input[type="text"], input[type="number"] {
   overflow-x: hidden;
 }
 
+.eventDescription {
+  margin-bottom: 2%;
+}
+
 .number-of-events {
   width: 80px;
   margin: 20px 0 50px;
