@@ -77,7 +77,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {!window.navigator.online
+        {!window.navigator.onLine
           ?
           (<OfflineAlert text={this.state.offlineText} />)
           :
